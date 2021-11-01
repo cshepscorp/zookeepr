@@ -43,6 +43,11 @@ function filterByQuery(query, animalsArray) {
     }
     return filteredResults;
 }
+
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+}
 // route that the front-end can request data from
 /* the get() method requires two arguments. 
 1. a string that describes the route the client will have to fetch from. 
@@ -56,8 +61,19 @@ app.get('/api/animals', (req, res) => {
     }
     res.json(results); // res parameter (short for response)
   });
+
+  // Unlike the query object, the param object needs to be defined in the route path
+// this route should only return a single animal, because the id is unique. We also know that there won't be any query on a single animal, so there's no need for all of the other code.
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result);
+    } else {
+        res.sendStatus(404);
+    }
+});
 /*
-Now we just need to use one method to make our server listen. We're going to chain the listen() method onto our server to do it. To do that, add the following code to the end of server.js
+Now we just need to use one method to make our server listen. We're going to chain the listen() method onto our server to do it
 */
 app.listen(PORT, () => { // PORT value matches up with const PORT we set at start of file determined by Heroku
     console.log(`API server now on port ${PORT}!`);
