@@ -2,6 +2,7 @@
 const { animals } = require('./data/animals');
 
 const express = require('express');
+const PORT = process.env.PORT || 3001;
 const app = express(); // instantiate the server
 
 // instead of handling the filter functionality inside the .get() callback, we're going to break it out into its own function
@@ -58,6 +59,6 @@ app.get('/api/animals', (req, res) => {
 /*
 Now we just need to use one method to make our server listen. We're going to chain the listen() method onto our server to do it. To do that, add the following code to the end of server.js
 */
-app.listen(3001, () => {
-    console.log(`API server now on port 3001!`);
+app.listen(PORT, () => { // PORT value matches up with const PORT we set at start of file determined by Heroku
+    console.log(`API server now on port ${PORT}!`);
   });
