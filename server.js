@@ -7,7 +7,6 @@ const { animals } = require('./data/animals'); // whenever we use require() to i
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 
-
 const app = express(); // instantiate the server
 /* app.use() method. This is a method executed by our Express.js server that mounts a function to the server that our requests will pass through before getting to the intended endpoint. The functions we can mount to our server are referred to as middleware. */
 /* In order for our server to accept incoming data the way we need it to, we need to tell our Express.js app to intercept our POST request before it gets to the callback function. At that point, the data will be run through a couple of functions to take the raw data transferred over HTTP and convert it to a JSON object. */
