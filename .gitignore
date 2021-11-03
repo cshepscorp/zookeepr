@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# old server.js file keeping for my personal records/research
+server_old.js
