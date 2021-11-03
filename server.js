@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path'); // path provides utilities for working with file and directory paths
-
+const express = require('express');
 // create a route that the front-end can request data from
 const { animals } = require('./data/animals'); // whenever we use require() to import data or functionality, it's only reading the data and creating a copy of it to use in server.js (or the current file you're requiring file to)
 
-const express = require('express');
+
 const PORT = process.env.PORT || 3001;
 
 const app = express(); // instantiate the server
@@ -18,6 +18,15 @@ app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 // this method we used takes incoming POST data in the form of JSON and parses it into the req.body JavaScript object. Both of the above middleware functions need to be set up every time you create a server that's looking to accept POST data.
 app.use(express.json());
+
+// here, we're telling express to reference these files for use
+// .html pages, stylesheets, JavaScript and images
+// with express.static, we provide a file path to a location in our app (the public folder)
+// and instruct the server to make these files static resources
+// no need to create a specific server endpoint created for it!
+// Every time we create a server that will serve a front end as well as JSON data,
+// we'll want to use this middleware
+app.use(express.static('public'));
 
 // instead of handling the filter functionality inside the .get() callback, we're going to break it out into its own function
 function filterByQuery(query, animalsArray) {
@@ -150,6 +159,31 @@ app.post('/api/animals', (req, res) => {
         res.json(animal);
     }
     // createNewAnimal(); // takes the new animal data and adds it to the animalsArray we passed, and then write the new array data to animals.json; After saving it, we'll send the data back to the route's callback function so it can finally respond to the request
+});
+
+// a route that has the term api in it will deal in transference of JSON data,
+// a more normal-looking endpoint such as /animals should serve an HTML page
+app.get('/', (req, res) => {
+    // we use sendFile when sending an HTML page to browser
+    // __dirname, which represents the directory of the file we execute the code in '/'
+    // with the path of where to find the index.html file
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+// in case a user requests a non-existent path
+// * is a wildcard, meaning any route that wasn't previously defined will fall
+// under this request and will receive the homepage as the response
+// in order of routes, * should always come last!!!!
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 /*
