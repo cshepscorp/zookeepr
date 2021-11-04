@@ -26,7 +26,7 @@ const handleAnimalFormSubmit = event => {
   }
   const animalObject = { name, species, diet, personalityTraits };
 
-  fetch('/api/animals', {
+  fetch('api/animals', {
     method: 'POST',
     // Without these, we would never receive req.body on the server
     headers: {
